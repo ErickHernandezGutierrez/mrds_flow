@@ -1,21 +1,59 @@
-MIT License
+Pipeline for MRDS
+=========================
 
-Copyright (c) 2024 Sherbrooke Connectivity Imaging Lab
+USAGE
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+nextflow run main.nf --input ... [OPTIONAL_ARGUMENTS]
+To call with a container add:
+    -with-singularity scilus/scilus:1.6.0
+    -with-docker scilus/scilus:1.6.0
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+MRDS must be installed from https://github.com/rcleija/mrds
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Warning
+=======
+Output images in mni space are named "*_mni.nii.gz", if not there are in native space.
+
+If using this pipeline, please read and cite the following publications:
+[1] MRDS-paper 
+[2] Frontiers paper
+
+DESCRIPTION
+
+    --input=/path/to/[root]             Root folder containing multiple subjects
+
+                                        [root]
+                                        ├── S1
+                                        │   ├── *dwi.nii.gz
+                                        │   ├── *mask.nii.gz
+                                        │   ├── *scheme
+                                        │   └── *tracking.trk (optional to perform TODI model selection)
+                                        └── S2
+                                            └── *
+
+    OPTIONAL ARGUMENTS (current value)
+    --use_isotropic                     Include isotropic tensor fitting to MRDS ($use_isotropic)
+    --model_selection                   Model selector for MRDS ($model_selection)
+    --processes                         The number of parallel processes to launch ($cpu_count).
+                                        Only affects the local scheduler.
+
+
+AVAILABLE PROFILES (using -profile option (e.g. -profile fully_reproducible, cbrain))
+fully_reproducible                       When this profile is used, all the parameters will be set to have 100% reproducible results.
+
+macos                                    When this profile is used, mrds_flow will modify a parameter (scratch) for MacOS users.
+
+cbrain                                   When this profile is used, Nextflow will copy all the output files in publishDir and not use symlinks.
+
+NOTES
+
+The 'scilpy/scripts' folder should be in your PATH environment variable. Not necessary if the
+Singularity container is used.
+
+The intermediate working directory is, by default, set to './work'.
+To change it, use the '-w WORK_DIR' argument.
+
+The default config file is tractoflow/nextflow.config.
+Use '-C config_file.config' to specify a non-default configuration file.
+The '-C config_file.config' must be inserted after the nextflow call
+like 'nextflow -C config_file.config run ...'.
