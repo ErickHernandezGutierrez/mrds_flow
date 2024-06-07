@@ -34,7 +34,7 @@ log.info ""
 log.info "Options"
 log.info "======="
 log.info ""
-log.info "[Recobundles options]"
+log.info "[MRDS options]"
 log.info "Use Isotropic Compartment: $params.use_isotropic"
 log.info "Model Selector: $params.model_selection"
 log.info ""
@@ -61,7 +61,7 @@ Channel
 Channel
     .fromFilePairs("$params.input/**/*mask.nii.gz",
         size: -1) { it.parent.name }
-    .into{mask_for_mrds; mask_for_modsel}
+    .into{mask_for_mrds; mask_for_modsel; mask_for_metrics}
 
 workflow.onComplete {
     log.info "Pipeline completed at: $workflow.complete"
@@ -95,6 +95,16 @@ process Fit_MRDS {
              "${sid}__MRDS_Diff_V3_NUM_COMP.nii.gz",\
              "${sid}__MRDS_Diff_V3_PDDs_CARTESIAN.nii.gz" into mrds_for_modsel
 
+    file "${sid}__DTInolin_COMP_SIZE.nii.gz"
+    file "${sid}__DTInolin_EIGENVALUES.nii.gz"
+    file "${sid}__DTInolin_ISOTROPIC.nii.gz"
+    file "${sid}__DTInolin_NUM_COMP.nii.gz"
+    file "${sid}__DTInolin_PDDs_CARTESIAN.nii.gz"
+    file "${sid}__DTInolin_ResponseAnisotropic.txt"
+    file "${sid}__DTInolin_ResponseAnisotropicMask.nii.gz"
+    file "${sid}__DTInolin_ResponseIsotropic.txt"
+    file "${sid}__DTInolin_ResponseIsotropicMask.nii.gz"
+    file "${sid}__DTInolin_Tensor.nii.gz"
     file "${sid}__MRDS_Diff_${params.model_selection}_COMP_SIZE.nii.gz"
     file "${sid}__MRDS_Diff_${params.model_selection}_EIGENVALUES.nii.gz"
     file "${sid}__MRDS_Diff_${params.model_selection}_ISOTROPIC.nii.gz"
@@ -172,8 +182,9 @@ process Fit_MRDS {
     file "${sid}__MRDS_Fixed_V3_PDDs_CARTESIAN.nii.gz"
 
     script:
+    log.info "${dwi} ${scheme} ${mask} ${sid}_  $params.model_selection"
     """
-    mdtmrds ${dwi} ${scheme} ${sid}_ -correction 0 -response 0,0,0.003 -mask ${mask} -modsel ${params.model_selection.toLowerCase()} -each -intermediate -iso -mse -method diff
+    scil_fit_mrds.py ${dwi} ${scheme} --mask ${mask} --modsel ${params.model_selection.toLowerCase()} --method Diff --prefix ${sid}_
     """
 }
 
@@ -191,7 +202,8 @@ process Compute_TODI {
 
     script:
     """
-    scil_mrds_compute_todi.py ${tractogram} ${dwi} ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz ${sid}__MRDS_Diff_${params.model_selection}_TOD_NUFO.nii.gz
+    scil_compute_todi.py ${tractogram} --out_todi_sh ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz --reference ${dwi} --sh_basis tournier07 -f
+    scil_compute_fodf_metrics.py ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz --not_all --nufo ${sid}__MRDS_Diff_${params.model_selection}_TOD_NUFO.nii.gz --sh_basis tournier07 --rt 0.2 -f
     """
 }
 
@@ -208,8 +220,8 @@ process Modsel_TODI {
                                                 file(n3_compsize), file(n3_eigen), file(n3_iso), file(n3_numcomp), file(n3_pdds) from dwi_nufo_mrds_for_modsel
 
     output:
+    set sid, "${sid}__MRDS_Diff_TODI_EIGENVALUES.nii.gz" into eigenvalues_for_metrics
     file "${sid}__MRDS_Diff_TODI_COMP_SIZE.nii.gz"
-    file "${sid}__MRDS_Diff_TODI_EIGENVALUES.nii.gz"
     file "${sid}__MRDS_Diff_TODI_ISOTROPIC.nii.gz"
     file "${sid}__MRDS_Diff_TODI_NUM_COMP.nii.gz"
     file "${sid}__MRDS_Diff_TODI_PDDs_CARTESIAN.nii.gz"
@@ -217,5 +229,25 @@ process Modsel_TODI {
     script:
     """
     scil_mrds_modsel_todi.py ${nufo} ${dwi} TODI --N1 ${n1_compsize} ${n1_eigen} ${n1_iso} ${n1_numcomp} ${n1_pdds} --N2 ${n2_compsize} ${n2_eigen} ${n2_iso} ${n2_numcomp} ${n2_pdds} --N3 ${n3_compsize} ${n3_eigen} ${n3_iso} ${n3_numcomp} ${n3_pdds} --prefix ${sid}_ --mask ${mask}
+    """
+}
+
+eigenvalues_for_metrics
+    .combine(mask_for_metrics, by: 0)
+    .set{eigenvalues_mask_for_metrics}
+
+process MRDS_Metrics {
+    input:
+    set sid, eigenvalues, mask from eigenvalues_mask_for_metrics
+
+    output:
+    file "${sid}__MRDS_Diff_TODI_AD.nii.gz"
+    file "${sid}__MRDS_Diff_TODI_RD.nii.gz"
+    file "${sid}__MRDS_Diff_TODI_MD.nii.gz"
+    file "${sid}__MRDS_Diff_TODI_FA.nii.gz"
+
+    script:
+    """
+    scil_compute_mrds_metrics.py ${eigenvalues} ${sid}__MRDS_Diff_TODI_AD.nii.gz ${sid}__MRDS_Diff_TODI_RD.nii.gz ${sid}__MRDS_Diff_TODI_MD.nii.gz ${sid}__MRDS_Diff_TODI_FA.nii.gz
     """
 }
