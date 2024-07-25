@@ -4,7 +4,8 @@ if(params.help) {
     usage = file("$baseDir/USAGE")
     cpu_count = Runtime.runtime.availableProcessors()
 
-    bindings = ["use_isotropic":"$params.use_isotropic",
+    bindings = ["use_fslgrad":"$params.use_fslgrad",
+                "use_isotropic":"$params.use_isotropic",
                 "model_selection":"$params.model_selection",
                 "register_processes":"$params.register_processes",
                 "rbx_processes":"$params.rbx_processes",
@@ -54,7 +55,17 @@ Channel
     .into{dwi_for_mrds; dwi_for_todi; dwi_for_modsel}
 
 Channel
-    .fromFilePairs("$params.input/**/*scheme",
+    .fromFilePairs("$params.input/**/*.bval",
+                   size: -1) { it.parent.parent.name }
+    .set{in_bval}
+
+Channel
+    .fromFilePairs("$params.input/**/*.bvec",
+                   size: -1) { it.parent.parent.name }
+    .set{in_bvec}
+
+Channel
+    .fromFilePairs("$params.input/**/*.b",
         size: -1) { it.parent.name }
     .set{scheme_for_mrds}
 
@@ -63,10 +74,32 @@ Channel
         size: -1) { it.parent.name }
     .into{mask_for_mrds; mask_for_modsel; mask_for_metrics}
 
+if (params.use_fslgrad) {
+    in_bval
+        .combine(in_bvec, by: 0)
+        .set{bval_bvec_for_scheme}
+}
+
 workflow.onComplete {
     log.info "Pipeline completed at: $workflow.complete"
     log.info "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
     log.info "Execution duration: $workflow.duration"
+}
+
+process Convert_Scheme {
+    input:
+    set sid, file(bval), file(bvec) from bval_bvec_for_scheme
+
+    output:
+    set sid, "${sid}__scheme.b" into scheme_for_mrds
+
+    when:
+    params.use_fslgrad
+
+    script:
+    """
+    scil_convert_gradients_fsl_to_mrtrix.py ${bval} ${bvec} ${sid}__scheme.b
+    """
 }
 
 dwi_for_mrds
@@ -94,7 +127,6 @@ process Fit_MRDS {
              "${sid}__MRDS_Diff_V3_ISOTROPIC.nii.gz",\
              "${sid}__MRDS_Diff_V3_NUM_COMP.nii.gz",\
              "${sid}__MRDS_Diff_V3_PDDs_CARTESIAN.nii.gz" into mrds_for_modsel
-
     file "${sid}__DTInolin_COMP_SIZE.nii.gz"
     file "${sid}__DTInolin_EIGENVALUES.nii.gz"
     file "${sid}__DTInolin_ISOTROPIC.nii.gz"
