@@ -56,12 +56,12 @@ Channel
 
 Channel
     .fromFilePairs("$params.input/**/*.bval",
-                   size: -1) { it.parent.parent.name }
+                   size: -1) { it.parent.name }
     .set{in_bval}
 
 Channel
     .fromFilePairs("$params.input/**/*.bvec",
-                   size: -1) { it.parent.parent.name }
+                   size: -1) { it.parent.name }
     .set{in_bvec}
 
 Channel
@@ -80,31 +80,29 @@ workflow.onComplete {
     log.info "Execution duration: $workflow.duration"
 }
 
-if (params.use_fslgrad) {
-    in_bval
-        .combine(in_bvec, by: 0)
-        .set{bval_bvec_for_scheme}
-}
+in_bval
+    .combine(in_bvec, by: 0)
+    .set{bval_bvec_for_scheme}
 
 process Convert_Scheme {
     input:
     set sid, file(bval), file(bvec) from bval_bvec_for_scheme
 
     output:
-    set sid, "${sid}__scheme.b" into fslgrad_for_mrds
+    set sid, "${sid}__mrtrix-scheme.b" into mrtrix_scheme_for_mrds
 
     when:
     params.use_fslgrad
 
     script:
     """
-    scil_convert_gradients_fsl_to_mrtrix.py ${bval} ${bvec} ${sid}__scheme.b
+    scil_convert_gradients_fsl_to_mrtrix.py ${bval} ${bvec} ${sid}__mrtrix-scheme.b
     """
 }
 
 if (params.use_fslgrad) {
     dwi_for_mrds
-        .combine(fslgrad_for_mrds, by: 0)
+        .combine(mrtrix_scheme_for_mrds, by: 0)
         .combine(mask_for_mrds, by: 0)
         .set{dwi_scheme_mask_for_mrds}
 } else {
