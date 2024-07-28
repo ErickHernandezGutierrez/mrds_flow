@@ -7,9 +7,6 @@ if(params.help) {
     bindings = ["use_fslgrad":"$params.use_fslgrad",
                 "use_isotropic":"$params.use_isotropic",
                 "model_selection":"$params.model_selection",
-                "register_processes":"$params.register_processes",
-                "rbx_processes":"$params.rbx_processes",
-                "single_dataset_size_GB":"$params.single_dataset_size_GB",
                 "cpu_count":"$cpu_count"]
 
     engine = new groovy.text.SimpleTemplateEngine()

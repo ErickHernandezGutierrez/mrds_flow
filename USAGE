@@ -5,15 +5,13 @@ USAGE
 
 nextflow run main.nf --input ... [OPTIONAL_ARGUMENTS]
 To call with a container add:
-    -with-singularity scilus/scilus:1.6.0
-    -with-docker scilus/scilus:1.6.0
+    -with-singularity mrds_flow.sif
+    -with-docker mrds_flow
 
 MRDS must be installed from https://github.com/rcleija/mrds
 
 Warning
 =======
-Output images in mni space are named "*_mni.nii.gz", if not there are in native space.
-
 If using this pipeline, please read and cite the following publications:
 [1] MRDS-paper 
 [2] Frontiers paper
@@ -25,8 +23,10 @@ DESCRIPTION
                                         [root]
                                         ├── S1
                                         │   ├── *dwi.nii.gz
-                                        │   ├── *mask.nii.gz
-                                        │   ├── *scheme
+                                        │   ├── *mask.nii.gz (wm mask is highly recommended)
+                                        │   ├── *scheme.b (optinal if fsl scheme files are provided)
+                                        |   ├── *scheme.bvec (optinal if mrtrix scheme file is provided)
+                                        |   ├── *scheme.bval (optinal if mrtrix scheme file is provided)
                                         │   └── *tracking.trk (optional to perform TODI model selection)
                                         └── S2
                                             └── *
@@ -34,27 +34,25 @@ DESCRIPTION
     OPTIONAL ARGUMENTS (current value)
     --use_fslgrad                       Provide the diffusion gradient table in FSL bvecs/bvals format
     --use_isotropic                     Include isotropic tensor fitting to MRDS ($use_isotropic)
-    --model_selection                   Model selector for MRDS ($model_selection)
+    --model_selection                   Preliminar model selector for MRDS ($model_selection)
     --processes                         The number of parallel processes to launch ($cpu_count).
                                         Only affects the local scheduler.
 
 
 AVAILABLE PROFILES (using -profile option (e.g. -profile fully_reproducible, cbrain))
-fully_reproducible                       When this profile is used, all the parameters will be set to have 100% reproducible results.
-
 macos                                    When this profile is used, mrds_flow will modify a parameter (scratch) for MacOS users.
 
 cbrain                                   When this profile is used, Nextflow will copy all the output files in publishDir and not use symlinks.
 
 NOTES
 
-The 'scilpy/scripts' folder should be in your PATH environment variable. Not necessary if the
+The 'scilpy/scripts' and MRDS bin folders should be in your PATH environment variable. Not necessary if the
 Singularity container is used.
 
 The intermediate working directory is, by default, set to './work'.
 To change it, use the '-w WORK_DIR' argument.
 
-The default config file is tractoflow/nextflow.config.
+The default config file is mrds_flow/nextflow.config.
 Use '-C config_file.config' to specify a non-default configuration file.
 The '-C config_file.config' must be inserted after the nextflow call
 like 'nextflow -C config_file.config run ...'.
