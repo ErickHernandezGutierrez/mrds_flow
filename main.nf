@@ -74,16 +74,16 @@ Channel
         size: -1) { it.parent.name }
     .into{mask_for_mrds; mask_for_modsel; mask_for_metrics}
 
-if (params.use_fslgrad) {
-    in_bval
-        .combine(in_bvec, by: 0)
-        .set{bval_bvec_for_scheme}
-}
-
 workflow.onComplete {
     log.info "Pipeline completed at: $workflow.complete"
     log.info "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
     log.info "Execution duration: $workflow.duration"
+}
+
+if (params.use_fslgrad) {
+    in_bval
+        .combine(in_bvec, by: 0)
+        .set{bval_bvec_for_scheme}
 }
 
 process Convert_Scheme {
@@ -91,7 +91,7 @@ process Convert_Scheme {
     set sid, file(bval), file(bvec) from bval_bvec_for_scheme
 
     output:
-    set sid, "${sid}__scheme.b" into scheme_for_mrds
+    set sid, "${sid}__scheme.b" into fslgrad_for_mrds
 
     when:
     params.use_fslgrad
@@ -102,10 +102,17 @@ process Convert_Scheme {
     """
 }
 
-dwi_for_mrds
-    .combine(scheme_for_mrds, by: 0)
-    .combine(mask_for_mrds, by: 0)
-    .set{dwi_scheme_mask_for_mrds}
+if (params.use_fslgrad) {
+    dwi_for_mrds
+        .combine(fslgrad_for_mrds, by: 0)
+        .combine(mask_for_mrds, by: 0)
+        .set{dwi_scheme_mask_for_mrds}
+} else {
+    dwi_for_mrds
+        .combine(scheme_for_mrds, by: 0)
+        .combine(mask_for_mrds, by: 0)
+        .set{dwi_scheme_mask_for_mrds}
+}
 
 process Fit_MRDS {
     input:
@@ -214,7 +221,6 @@ process Fit_MRDS {
     file "${sid}__MRDS_Fixed_V3_PDDs_CARTESIAN.nii.gz"
 
     script:
-    log.info "${dwi} ${scheme} ${mask} ${sid}_  $params.model_selection"
     """
     scil_fit_mrds.py ${dwi} ${scheme} --mask ${mask} --modsel ${params.model_selection.toLowerCase()} --method Diff --prefix ${sid}_
     """
