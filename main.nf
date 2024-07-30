@@ -146,12 +146,12 @@ process Fit_MRDS {
     file "${sid}__MRDS_Diff_${params.model_selection}_MSE.nii.gz"
     file "${sid}__MRDS_Diff_${params.model_selection}_NUM_COMP.nii.gz"
     file "${sid}__MRDS_Diff_${params.model_selection}_PDDs_CARTESIAN.nii.gz"
-    "${sid}__MRDS_Diff_V0_COMP_SIZE.nii.gz", optinal: true
-    "${sid}__MRDS_Diff_V0_EIGENVALUES.nii.gz", optinal: true
-    "${sid}__MRDS_Diff_V0_ISOTROPIC.nii.gz", optinal: true
-    "${sid}__MRDS_Diff_V0_MSE.nii.gz", optinal: true
-    "${sid}__MRDS_Diff_V0_NUM_COMP.nii.gz", optinal: true
-    "${sid}__MRDS_Diff_V0_PDDs_CARTESIAN.nii.gz", optinal: true
+    file "${sid}__MRDS_Diff_V0_COMP_SIZE.nii.gz", optinal: true
+    file "${sid}__MRDS_Diff_V0_EIGENVALUES.nii.gz", optinal: true
+    file "${sid}__MRDS_Diff_V0_ISOTROPIC.nii.gz", optinal: true
+    file "${sid}__MRDS_Diff_V0_MSE.nii.gz", optinal: true
+    file "${sid}__MRDS_Diff_V0_NUM_COMP.nii.gz", optinal: true
+    file "${sid}__MRDS_Diff_V0_PDDs_CARTESIAN.nii.gz", optinal: true
     file "${sid}__MRDS_Diff_V1_MSE.nii.gz"
     file "${sid}__MRDS_Diff_V2_MSE.nii.gz"
     file "${sid}__MRDS_Diff_V3_MSE.nii.gz"
@@ -161,12 +161,12 @@ process Fit_MRDS {
     file "${sid}__MRDS_Equal_${params.model_selection}_MSE.nii.gz"
     file "${sid}__MRDS_Equal_${params.model_selection}_NUM_COMP.nii.gz"
     file "${sid}__MRDS_Equal_${params.model_selection}_PDDs_CARTESIAN.nii.gz"
-    "${sid}__MRDS_Equal_V0_COMP_SIZE.nii.gz", optional: true
-    "${sid}__MRDS_Equal_V0_EIGENVALUES.nii.gz", optional: true
-    "${sid}__MRDS_Equal_V0_ISOTROPIC.nii.gz", optional: true
-    "${sid}__MRDS_Equal_V0_MSE.nii.gz", optional: true
-    "${sid}__MRDS_Equal_V0_NUM_COMP.nii.gz", optional: true
-    "${sid}__MRDS_Equal_V0_PDDs_CARTESIAN.nii.gz", optional: true
+    file "${sid}__MRDS_Equal_V0_COMP_SIZE.nii.gz", optional: true
+    file "${sid}__MRDS_Equal_V0_EIGENVALUES.nii.gz", optional: true
+    file "${sid}__MRDS_Equal_V0_ISOTROPIC.nii.gz", optional: true
+    file "${sid}__MRDS_Equal_V0_MSE.nii.gz", optional: true
+    file "${sid}__MRDS_Equal_V0_NUM_COMP.nii.gz", optional: true
+    file "${sid}__MRDS_Equal_V0_PDDs_CARTESIAN.nii.gz", optional: true
     file "${sid}__MRDS_Equal_V1_COMP_SIZE.nii.gz"
     file "${sid}__MRDS_Equal_V1_EIGENVALUES.nii.gz"
     file "${sid}__MRDS_Equal_V1_ISOTROPIC.nii.gz"
@@ -191,12 +191,12 @@ process Fit_MRDS {
     file "${sid}__MRDS_Fixed_${params.model_selection}_MSE.nii.gz"
     file "${sid}__MRDS_Fixed_${params.model_selection}_NUM_COMP.nii.gz"
     file "${sid}__MRDS_Fixed_${params.model_selection}_PDDs_CARTESIAN.nii.gz"
-    "${sid}__MRDS_Fixed_V0_COMP_SIZE.nii.gz", optional: true
-    "${sid}__MRDS_Fixed_V0_EIGENVALUES.nii.gz", optional: true
-    "${sid}__MRDS_Fixed_V0_ISOTROPIC.nii.gz", optional: true
-    "${sid}__MRDS_Fixed_V0_MSE.nii.gz", optional: true
-    "${sid}__MRDS_Fixed_V0_NUM_COMP.nii.gz", optional: true
-    "${sid}__MRDS_Fixed_V0_PDDs_CARTESIAN.nii.gz", optional: true
+    file "${sid}__MRDS_Fixed_V0_COMP_SIZE.nii.gz", optional: true
+    file "${sid}__MRDS_Fixed_V0_EIGENVALUES.nii.gz", optional: true
+    file "${sid}__MRDS_Fixed_V0_ISOTROPIC.nii.gz", optional: true
+    file "${sid}__MRDS_Fixed_V0_MSE.nii.gz", optional: true
+    file "${sid}__MRDS_Fixed_V0_NUM_COMP.nii.gz", optional: true
+    file "${sid}__MRDS_Fixed_V0_PDDs_CARTESIAN.nii.gz", optional: true
     file "${sid}__MRDS_Fixed_V1_COMP_SIZE.nii.gz"
     file "${sid}__MRDS_Fixed_V1_EIGENVALUES.nii.gz"
     file "${sid}__MRDS_Fixed_V1_ISOTROPIC.nii.gz"
