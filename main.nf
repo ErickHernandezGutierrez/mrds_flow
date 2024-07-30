@@ -33,6 +33,7 @@ log.info "Options"
 log.info "======="
 log.info ""
 log.info "[MRDS options]"
+log.info "Use FSL Gradient: $params.use_fslgrad"
 log.info "Use Isotropic Compartment: $params.use_isotropic"
 log.info "Model Selector: $params.model_selection"
 log.info ""
@@ -217,7 +218,7 @@ process Fit_MRDS {
 
     script:
     """
-    scil_fit_mrds.py ${dwi} ${scheme} --mask ${mask} --modsel ${params.model_selection.toLowerCase()} --method Diff --prefix ${sid}_
+    scil_fit_mrds.py ${dwi} ${scheme} --mask ${mask} --modsel ${params.model_selection.toLowerCase()} --method Diff --prefix ${sid}_ ${params.use_isotropic ? '-iso' : ''}
     """
 }
 
