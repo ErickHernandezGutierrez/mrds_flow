@@ -63,11 +63,6 @@ Channel
     .set{in_bvec}
 
 Channel
-    .fromFilePairs("$params.input/**/*.b",
-        size: -1) { it.parent.name }
-    .set{scheme_for_mrds}
-
-Channel
     .fromFilePairs("$params.input/**/*mask.nii.gz",
         size: -1) { it.parent.name }
     .into{mask_for_mrds; mask_for_modsel; mask_for_metrics}
@@ -87,28 +82,18 @@ process Convert_Scheme {
     set sid, path(bval), path(bvec) from bval_bvec_for_scheme
 
     output:
-    set sid, "${sid}__mrtrix-scheme.b" into mrtrix_scheme_for_mrds
-
-    when:
-    params.use_fslgrad
+    set sid, "${sid}__scheme.b" into scheme_for_mrds
 
     script:
     """
-    scil_convert_gradients_fsl_to_mrtrix.py ${bval} ${bvec} ${sid}__mrtrix-scheme.b
+    scil_convert_gradients_fsl_to_mrtrix.py ${bval} ${bvec} ${sid}__scheme.b
     """
 }
 
-if (params.use_fslgrad) {
-    dwi_for_mrds
-        .combine(mrtrix_scheme_for_mrds, by: 0)
-        .combine(mask_for_mrds, by: 0)
-        .set{dwi_scheme_mask_for_mrds}
-} else {
-    dwi_for_mrds
-        .combine(scheme_for_mrds, by: 0)
-        .combine(mask_for_mrds, by: 0)
-        .set{dwi_scheme_mask_for_mrds}
-}
+dwi_for_mrds
+    .combine(scheme_for_mrds, by: 0)
+    .combine(mask_for_mrds, by: 0)
+    .set{dwi_scheme_mask_for_mrds}
 
 process Fit_MRDS {
     input:
