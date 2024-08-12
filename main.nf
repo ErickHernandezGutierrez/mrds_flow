@@ -33,9 +33,9 @@ log.info "Options"
 log.info "======="
 log.info ""
 log.info "[MRDS options]"
-log.info "Use FSL Gradient: $params.use_fslgrad"
 log.info "Use Isotropic Compartment: $params.use_isotropic"
 log.info "Model Selector: $params.model_selection"
+log.info "Use Provided Mask: $params.use_provided_mask"
 log.info ""
 log.info ""
 
@@ -86,7 +86,7 @@ process Convert_Scheme {
 
     script:
     """
-    scil_convert_gradients_fsl_to_mrtrix.py ${bval} ${bvec} ${sid}__scheme.b
+    scil_convert_gradients_fsl_to_mrtrix.py ${bval} ${bvec} ${sid}__scheme.b -f
     """
 }
 
@@ -98,11 +98,11 @@ process Compute_Mask {
     set sid, "${sid}__mask.nii.gz" into computed_mask_for_mrds, computed_mask_for_modsel, computed_mask_for_metrics
 
     when:
-    params.use_provided_mask == false
+    !params.use_provided_mask
 
     script:
     """
-    scil_compute_streamlines_density_map.py ${tracking} ${sid}__mask.nii.gz --binary
+    scil_compute_streamlines_density_map.py ${tracking} ${sid}__mask.nii.gz --binary -f
     """
 }
 
