@@ -4,7 +4,7 @@ if(params.help) {
     usage = file("$baseDir/USAGE")
     cpu_count = Runtime.runtime.availableProcessors()
 
-    bindings = ["use_fslgrad":"$params.use_fslgrad",
+    bindings = ["use_provided_mask":"$params.use_provided_mask",
                 "use_isotropic":"$params.use_isotropic",
                 "model_selection":"$params.model_selection",
                 "cpu_count":"$cpu_count"]
@@ -42,10 +42,10 @@ log.info ""
 log.info "Input: $params.input"
 root = file(params.input)
 /* Watch out, files are ordered alphabetically in channel */
-tractogram_for_todi = Channel
-     .fromFilePairs("$root/**/{*tracking*.*,}",
-                    size: -1,
-                    maxDepth:1) {it.parent.name}
+Channel
+    .fromFilePairs("$root/**/{*tracking*.*,}",
+                    size: -1, maxDepth:1) {it.parent.name}
+    .into{tractogram_for_todi; tractogram_for_mask}
 
 Channel
     .fromFilePairs("$params.input/**/*dwi.nii.gz",
@@ -65,7 +65,7 @@ Channel
 Channel
     .fromFilePairs("$params.input/**/*mask.nii.gz",
         size: -1) { it.parent.name }
-    .into{mask_for_mrds; mask_for_modsel; mask_for_metrics}
+    .into{provided_mask_for_mrds; provided_mask_for_modsel; provided_mask_for_metrics}
 
 workflow.onComplete {
     log.info "Pipeline completed at: $workflow.complete"
@@ -88,6 +88,38 @@ process Convert_Scheme {
     """
     scil_convert_gradients_fsl_to_mrtrix.py ${bval} ${bvec} ${sid}__scheme.b
     """
+}
+
+process Compute_Mask {
+    input:
+    set sid, path(tracking) from tractogram_for_mask
+
+    output:
+    set sid, "${sid}__mask.nii.gz" into computed_mask_for_mrds, computed_mask_for_modsel, computed_mask_for_metrics
+
+    when:
+    params.use_provided_mask == false
+
+    script:
+    """
+    scil_compute_streamlines_density_map.py ${tracking} ${sid}__mask.nii.gz --binary
+    """
+}
+
+if (params.use_provided_mask) {
+    provided_mask_for_mrds
+        .set{mask_for_mrds}
+    provided_mask_for_modsel
+        .set{mask_for_modsel}
+    provided_mask_for_metrics
+        .set{mask_for_metrics}
+} else {
+    computed_mask_for_mrds
+        .set{mask_for_mrds}
+    computed_mask_for_modsel
+        .set{mask_for_modsel}
+    computed_mask_for_metrics
+        .set{mask_for_metrics}
 }
 
 dwi_for_mrds
