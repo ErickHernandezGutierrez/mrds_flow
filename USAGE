@@ -32,7 +32,6 @@ DESCRIPTION
                                             └── *
 
     OPTIONAL ARGUMENTS (current value)
-    --use_fslgrad                       Provide the diffusion gradient table in FSL bvecs/bvals format
     --use_isotropic                     Include isotropic tensor fitting to MRDS ($use_isotropic)
     --model_selection                   Preliminar model selector for MRDS ($model_selection)
     --processes                         The number of parallel processes to launch ($cpu_count).
