@@ -235,7 +235,12 @@ process Fit_MRDS {
 
     script:
     """
-    scil_fit_mrds.py ${dwi} ${scheme} --mask ${mask} --modsel ${params.model_selection.toLowerCase()} --method Diff --prefix ${sid}_ ${params.use_isotropic ? '-iso' : ''}
+    scil_fit_mrds.py ${dwi} ${scheme} \
+        --mask ${mask} \
+        --modsel ${params.model_selection.toLowerCase()} \
+        --method Diff \
+        --prefix ${sid}_ \
+        ${params.use_isotropic ? '-iso' : ''}
     """
 }
 
@@ -253,8 +258,14 @@ process Compute_TODI {
 
     script:
     """
-    scil_compute_todi.py ${tractogram} --out_todi_sh ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz --reference ${dwi} --sh_basis tournier07 -f
-    scil_compute_fodf_metrics.py ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz --not_all --nufo ${sid}__MRDS_Diff_${params.model_selection}_TOD_NUFO.nii.gz --sh_basis tournier07 --rt 0.2 -f
+    scil_compute_todi.py ${tractogram} --out_todi_sh ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz \
+        --reference ${dwi} \
+        --sh_basis tournier07 -f
+
+    scil_compute_fodf_metrics.py ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz \
+        --nufo ${sid}__MRDS_Diff_${params.model_selection}_TOD_NUFO.nii.gz \
+        --not_all \
+        --sh_basis tournier07 --rt 0.2 -f
     """
 }
 
@@ -279,7 +290,12 @@ process Modsel_TODI {
 
     script:
     """
-    scil_mrds_modsel_todi.py ${nufo} ${dwi} TODI --N1 ${n1_compsize} ${n1_eigen} ${n1_iso} ${n1_numcomp} ${n1_pdds} --N2 ${n2_compsize} ${n2_eigen} ${n2_iso} ${n2_numcomp} ${n2_pdds} --N3 ${n3_compsize} ${n3_eigen} ${n3_iso} ${n3_numcomp} ${n3_pdds} --prefix ${sid}_ --mask ${mask}
+    scil_mrds_modsel_todi.py ${nufo} ${dwi} TODI \
+        --N1 ${n1_compsize} ${n1_eigen} ${n1_iso} ${n1_numcomp} ${n1_pdds} \
+        --N2 ${n2_compsize} ${n2_eigen} ${n2_iso} ${n2_numcomp} ${n2_pdds} \
+        --N3 ${n3_compsize} ${n3_eigen} ${n3_iso} ${n3_numcomp} ${n3_pdds} \
+        --prefix ${sid}_ \
+        --mask ${mask}
     """
 }
 
@@ -289,7 +305,7 @@ eigenvalues_for_metrics
 
 process MRDS_Metrics {
     input:
-    set sid, eigenvalues, mask from eigenvalues_mask_for_metrics
+    set sid, path(eigenvalues), path(mask) from eigenvalues_mask_for_metrics
 
     output:
     path("${sid}__MRDS_Diff_TODI_AD.nii.gz")
@@ -299,6 +315,11 @@ process MRDS_Metrics {
 
     script:
     """
-    scil_compute_mrds_metrics.py ${eigenvalues} ${sid}__MRDS_Diff_TODI_AD.nii.gz ${sid}__MRDS_Diff_TODI_RD.nii.gz ${sid}__MRDS_Diff_TODI_MD.nii.gz ${sid}__MRDS_Diff_TODI_FA.nii.gz
+    scil_compute_mrds_metrics.py ${eigenvalues} \
+        ${sid}__MRDS_Diff_TODI_AD.nii.gz \
+        ${sid}__MRDS_Diff_TODI_RD.nii.gz \
+        ${sid}__MRDS_Diff_TODI_MD.nii.gz \
+        ${sid}__MRDS_Diff_TODI_FA.nii.gz \
+        --mask ${mask}
     """
 }
