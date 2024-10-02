@@ -37,6 +37,7 @@ log.info "[MRDS options]"
 log.info "Use Isotropic Compartment: $params.use_isotropic"
 log.info "Model Selector: $params.model_selection"
 log.info "Use Provided Mask: $params.use_provided_mask"
+log.info "Number of processes used: $params.processes"
 log.info "Number of MRDS processes: $params.mrds_processes"
 log.info ""
 log.info ""
@@ -49,8 +50,8 @@ if(params.mrds_processes < 0) {
     error "Error params.mrds_processes should be higher than 0"
 }
 
-if(params.mrds_processes < params.processes) {
-    error "Error params.mrds_processes should be higher than the params.processes - Currently ${params.mrds_processes} < ${params.processes}"
+if(params.mrds_processes > params.processes) {
+    error "Error params.mrds_processes should be lower than the params.processes - Currently ${params.mrds_processes} > ${params.processes}"
 }
 
 /* Watch out, files are ordered alphabetically in channel */
