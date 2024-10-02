@@ -38,11 +38,15 @@ DESCRIPTION
     OPTIONAL ARGUMENTS (current value)
     --use_isotropic                     Include isotropic tensor fitting to MRDS ($use_isotropic)
     --model_selection                   Preliminar model selector for MRDS ($model_selection)
+    --mrds_processes                    The number of parallel processes used for FIT_MRDS ($mrds_processes)
     --processes                         The number of parallel processes to launch ($cpu_count).
                                         Only affects the local scheduler.
 
 
 AVAILABLE PROFILES (using -profile option (e.g. -profile fully_reproducible, cbrain))
+
+fully_reproducible                       When this profile is used, all the parameters will be set to have 100% reproducible results.
+
 macos                                    When this profile is used, mrds_flow will modify a parameter (scratch) for MacOS users.
 
 cbrain                                   When this profile is used, Nextflow will copy all the output files in publishDir and not use symlinks.

@@ -7,6 +7,7 @@ if(params.help) {
     bindings = ["use_provided_mask":"$params.use_provided_mask",
                 "use_isotropic":"$params.use_isotropic",
                 "model_selection":"$params.model_selection",
+                "mrds_processes":"$params.mrds_processes",
                 "cpu_count":"$cpu_count"]
 
     engine = new groovy.text.SimpleTemplateEngine()
@@ -36,11 +37,23 @@ log.info "[MRDS options]"
 log.info "Use Isotropic Compartment: $params.use_isotropic"
 log.info "Model Selector: $params.model_selection"
 log.info "Use Provided Mask: $params.use_provided_mask"
+log.info "Number of processes used: $params.processes"
+log.info "Number of MRDS processes: $params.mrds_processes"
+log.info ""
 log.info ""
 log.info ""
 
 log.info "Input: $params.input"
 root = file(params.input)
+
+if(params.mrds_processes < 0) {
+    error "Error params.mrds_processes should be higher than 0"
+}
+
+if(params.mrds_processes > params.processes) {
+    error "Error params.mrds_processes should be lower than the params.processes - Currently ${params.mrds_processes} > ${params.processes}"
+}
+
 /* Watch out, files are ordered alphabetically in channel */
 Channel
     .fromFilePairs("$root/**/{*tracking*.*,}",
@@ -235,6 +248,8 @@ process Fit_MRDS {
 
     script:
     """
+    export OMP_NUM_THREADS=$params.mrds_processes
+
     scil_fit_mrds.py ${dwi} ${scheme} \
         --mask ${mask} \
         --modsel ${params.model_selection.toLowerCase()} \
