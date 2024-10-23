@@ -51,6 +51,39 @@ macos                                    When this profile is used, mrds_flow wi
 
 cbrain                                   When this profile is used, Nextflow will copy all the output files in publishDir and not use symlinks.
 
+OUTPUT
+
+The output files have the following format:
+
+`results_MRDS_<method>_<modsel>_<metric>.nii.gz`,
+
+where
+
+<method> represents the method used by MRDS to fit the multi-tensors at each voxel.
+There are 3 different methods:
+    'Fixed': All tensors eigenvalues are fixed.
+    'Equal': All tensors eigenvalues are estimated assuming all tensors are equal.
+    'Diff':  All tensors eigenvalues are estimated differently.
+
+<modsel> represents the model selection used by MRDS to estimate the number of
+tensors per voxel. There are 5 different models:
+    'V1': All voxels have exactly 1 tensors.
+    'V2': All voxels have exactly 2 tensors.
+    'V3': All voxels have exactly 3 tensors.
+    'BIC': Bayesian Information Criteria (BIC) determinates the number of tensors
+    'TODI': Track Orientation Distribution Imagining (TODI) determinates the number of tensors.
+
+<metric> represents the actual metric stored in the file. There 
+    'FA': fixel-FA metric
+    'RD': fixel-RD metric
+    'AD': fixel-AD metric
+    'MD': fixel-MD metric
+    'PDDs_CARTESIAN': Principal diffusion directions of the tensors
+    'NUM_COMP': Number of tensors
+    'COMP_SIZE': Compartment sizes of the tensors
+    'ISOTROPIC': Isotropic volumen fraction and diffusivity
+    'EIGENVALUES': Eigenvalues of the tensors.
+
 NOTES
 
 The 'scilpy/scripts' and MRDS bin folders should be in your PATH environment variable. Not necessary if the
