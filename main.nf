@@ -275,12 +275,13 @@ process Compute_TODI {
     """
     scil_compute_todi.py ${tractogram} --out_todi_sh ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz \
         --reference ${dwi} \
-        --sh_basis tournier07 -f
+        --sh_basis descoteaux07 -f
 
     scil_compute_fodf_metrics.py ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz \
         --nufo ${sid}__MRDS_Diff_${params.model_selection}_TOD_NUFO.nii.gz \
         --not_all \
-        --sh_basis tournier07 --rt 0.2 -f
+        --sh_basis descoteaux07 \
+        --rt 0.2 -f
     """
 }
 
