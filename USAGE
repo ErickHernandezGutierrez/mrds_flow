@@ -57,6 +57,48 @@ cbrain                                   When this profile is used, Nextflow wil
 OUTPUT
 =======
 
+    results_mrds/                       Root folder containing multiple subjects
+
+                                        [root]
+                                        ├── S1
+                                        │   ├── Convert_Scheme
+                                        │   │   └── *scheme.b (scheme file)
+                                        |   ├── Compute_Mask
+                                        |   |   └── *mask.nii.gz (automatic computed WM mask)
+                                        │   ├── Fit_MRDS
+                                        │   │   ├── *MRDS_Diff_V1_COMP_SIZE.nii.gz (1 tensor MRDS files)
+                                        │   │   ├── *MRDS_Diff_V1_EIGENVALUES.nii.gz
+                                        │   │   ├── *MRDS_Diff_V1_ISOTROPIC.nii.gz
+                                        │   │   ├── *MRDS_Diff_V1_NUM_COMP.nii.gz
+                                        │   │   ├── *MRDS_Diff_V1_PDDs_CARTESIAN.nii.gz
+                                        │   │   ├── *MRDS_Diff_V2_COMP_SIZE.nii.gz (2 tensor MRDS files)
+                                        │   │   ├── *MRDS_Diff_V2_EIGENVALUES.nii.gz
+                                        │   │   ├── *MRDS_Diff_V2_ISOTROPIC.nii.gz
+                                        │   │   ├── *MRDS_Diff_V2_NUM_COMP.nii.gz
+                                        │   │   ├── *MRDS_Diff_V2_PDDs_CARTESIAN.nii.gz
+                                        │   │   ├── *MRDS_Diff_V3_COMP_SIZE.nii.gz (3 tensor MRDS files)
+                                        │   │   ├── *MRDS_Diff_V3_EIGENVALUES.nii.gz
+                                        │   │   ├── *MRDS_Diff_V3_ISOTROPIC.nii.gz
+                                        │   │   ├── *MRDS_Diff_V3_NUM_COMP.nii.gz
+                                        │   │   ├── *MRDS_Diff_V3_PDDs_CARTESIAN.nii.gz
+                                        │   │   └── *DTInolin_ResponseAnisotropic.txt (inital diffusivities for MRDS)
+                                        │   ├── Compute_TODI
+                                        │   │   ├── *TOD_SH.nii.gz (track orientation density image in SH)
+                                        │   │   └── *TOD_NUFO.nii.gz (number of fiber orientations image extracted from TOD image)
+                                        │   ├── Modsel_TODI
+                                        │   │   ├── *MRDS_Diff_TODI_COMP_SIZE.nii.gz (MRDS files with TODI model selection)
+                                        │   │   ├── *MRDS_Diff_TODI_EIGENVALUES.nii.gz
+                                        │   │   ├── *MRDS_Diff_TODI_ISOTROPIC.nii.gz
+                                        │   │   ├── *MRDS_Diff_TODI_NUM_COMP.nii.gz
+                                        │   │   └── *MRDS_Diff_TODI_PDDs_CARTESIAN.nii.gz
+                                        │   ├── MRDS_Metrics
+                                        │   │   ├── *MRDS_Diff_TODI_FA.nii.gz (fixel-FA metric with TODI model selection)
+                                        │   │   ├── *MRDS_Diff_TODI_RD.nii.gz (fixel-RD metric with TODI model selection)
+                                        │   │   ├── *MRDS_Diff_TODI_AD.nii.gz (fixel-AD metric with TODI model selection)
+                                        │   │   └── *MRDS_Diff_TODI_MD.nii.gz (fixel-MD metric with TODI model selection)
+                                        └── S2
+                                            └── *
+
 The output files have the following format:
 
 `<sid>__MRDS_<method>_<modsel>_<metric>.nii.gz`,
