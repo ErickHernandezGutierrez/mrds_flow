@@ -55,9 +55,11 @@ OUTPUT
 
 The output files have the following format:
 
-`results_MRDS_<method>_<modsel>_<metric>.nii.gz`,
+`<sid>__MRDS_<method>_<modsel>_<metric>.nii.gz`,
 
 where
+
+<sid> represents the subject ID.
 
 <method> represents the method used by MRDS to fit the multi-tensors at each voxel.
 There are 3 different methods:
@@ -82,7 +84,8 @@ tensors per voxel. There are 5 different models:
     'NUM_COMP': Number of tensors
     'COMP_SIZE': Compartment sizes of the tensors
     'ISOTROPIC': Isotropic volumen fraction and diffusivity
-    'EIGENVALUES': Eigenvalues of the tensors.
+    'EIGENVALUES': Eigenvalues of the tensors
+    'MSE': Mean squared error of the fitting.
 
 NOTES
 
