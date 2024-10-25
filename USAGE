@@ -27,18 +27,18 @@ DESCRIPTION
                                         [root]
                                         ├── S1
                                         │   ├── *dwi.nii.gz
-                                        │   ├── *mask.nii.gz (wm mask is highly recommended)
-                                        │   ├── *scheme.b (optinal if fsl scheme files are provided)
-                                        |   ├── *scheme.bvec (optinal if mrtrix scheme file is provided)
-                                        |   ├── *scheme.bval (optinal if mrtrix scheme file is provided)
+                                        │   ├── *mask.nii.gz (optional mask, WM mask is highly recommended)
+                                        |   ├── *scheme.bvec
+                                        |   ├── *scheme.bval
                                         │   └── *tracking.trk (optional to perform TODI model selection)
                                         └── S2
                                             └── *
 
     OPTIONAL ARGUMENTS (current value)
-    --use_isotropic                     Include isotropic tensor fitting to MRDS ($use_isotropic)
-    --model_selection                   Preliminar model selector for MRDS ($model_selection)
-    --mrds_processes                    The number of parallel processes used for FIT_MRDS ($mrds_processes)
+    --use_isotropic                     Include isotropic tensor fitting to MRDS ($use_isotropic) [true]
+    --use_provided_mask                 Use the provided pre-computed mask rather than using automatic computation ($use_provided_mask) [true]
+    --r_threshold                       Relative threshold on fODF amplitude in percentage ($r_threshold) [0.2]
+    --mrds_processes                    The number of parallel processes used for FIT_MRDS ($mrds_processes) [4]
     --processes                         The number of parallel processes to launch ($cpu_count).
                                         Only affects the local scheduler.
 

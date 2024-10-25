@@ -6,7 +6,7 @@ if(params.help) {
 
     bindings = ["use_provided_mask":"$params.use_provided_mask",
                 "use_isotropic":"$params.use_isotropic",
-                "model_selection":"$params.model_selection",
+                "r_threshold":"$params.r_threshold",
                 "mrds_processes":"$params.mrds_processes",
                 "cpu_count":"$cpu_count"]
 
@@ -35,7 +35,7 @@ log.info "======="
 log.info ""
 log.info "[MRDS options]"
 log.info "Use Isotropic Compartment: $params.use_isotropic"
-log.info "Model Selector: $params.model_selection"
+log.info "Model Selector: TODI"
 log.info "Use Provided Mask: $params.use_provided_mask"
 log.info "Number of processes used: $params.processes"
 log.info "Number of MRDS processes: $params.mrds_processes"
@@ -168,7 +168,7 @@ process Fit_MRDS {
 
     scil_fit_mrds.py ${dwi} ${scheme} \
         --mask ${mask} \
-        --modsel ${params.model_selection.toLowerCase()} \
+        --modsel bic \
         --method Diff \
         --prefix ${sid}_ \
         ${params.use_isotropic ? '-iso' : ''}
@@ -198,7 +198,7 @@ process Compute_TODI {
         --nufo ${sid}__TOD_NUFO.nii.gz \
         --not_all \
         --sh_basis descoteaux07 \
-        --rt 0.2 -f
+        --rt ${params.r_threshold} -f
     """
 }
 
