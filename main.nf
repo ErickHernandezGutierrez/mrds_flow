@@ -145,20 +145,20 @@ process Fit_MRDS {
     set sid, path(dwi), path(scheme), path(mask) from dwi_scheme_mask_for_mrds
 
     output:
-    set sid, "${sid}__MRDS_Diff_V1_COMP_SIZE.nii.gz",\ 
-             "${sid}__MRDS_Diff_V1_EIGENVALUES.nii.gz",\
-             "${sid}__MRDS_Diff_V1_ISOTROPIC.nii.gz",\
-             "${sid}__MRDS_Diff_V1_NUM_COMP.nii.gz",\
-             "${sid}__MRDS_Diff_V1_PDDs_CARTESIAN.nii.gz",\
-             "${sid}__MRDS_Diff_V2_COMP_SIZE.nii.gz",\
-             "${sid}__MRDS_Diff_V2_EIGENVALUES.nii.gz",\
-             "${sid}__MRDS_Diff_V2_ISOTROPIC.nii.gz",\
-             "${sid}__MRDS_Diff_V2_NUM_COMP.nii.gz",\
-             "${sid}__MRDS_Diff_V2_PDDs_CARTESIAN.nii.gz",\
-             "${sid}__MRDS_Diff_V3_COMP_SIZE.nii.gz",\
-             "${sid}__MRDS_Diff_V3_EIGENVALUES.nii.gz",\
-             "${sid}__MRDS_Diff_V3_ISOTROPIC.nii.gz",\
-             "${sid}__MRDS_Diff_V3_NUM_COMP.nii.gz",\
+    set sid, "${sid}__MRDS_Diff_V1_COMP_SIZE.nii.gz", \
+             "${sid}__MRDS_Diff_V1_EIGENVALUES.nii.gz", \
+             "${sid}__MRDS_Diff_V1_ISOTROPIC.nii.gz", \
+             "${sid}__MRDS_Diff_V1_NUM_COMP.nii.gz", \
+             "${sid}__MRDS_Diff_V1_PDDs_CARTESIAN.nii.gz", \
+             "${sid}__MRDS_Diff_V2_COMP_SIZE.nii.gz", \
+             "${sid}__MRDS_Diff_V2_EIGENVALUES.nii.gz", \
+             "${sid}__MRDS_Diff_V2_ISOTROPIC.nii.gz", \
+             "${sid}__MRDS_Diff_V2_NUM_COMP.nii.gz", \
+             "${sid}__MRDS_Diff_V2_PDDs_CARTESIAN.nii.gz", \
+             "${sid}__MRDS_Diff_V3_COMP_SIZE.nii.gz", \
+             "${sid}__MRDS_Diff_V3_EIGENVALUES.nii.gz", \
+             "${sid}__MRDS_Diff_V3_ISOTROPIC.nii.gz", \
+             "${sid}__MRDS_Diff_V3_NUM_COMP.nii.gz", \
              "${sid}__MRDS_Diff_V3_PDDs_CARTESIAN.nii.gz" into mrds_for_modsel
     path("${sid}__DTInolin_ResponseAnisotropic.txt")
 
