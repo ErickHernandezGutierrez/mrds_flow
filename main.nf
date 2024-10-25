@@ -145,7 +145,7 @@ process Fit_MRDS {
     set sid, path(dwi), path(scheme), path(mask) from dwi_scheme_mask_for_mrds
 
     output:
-    set sid, "${sid}__MRDS_Diff_V1_COMP_SIZE.nii.gz",\
+    set sid, "${sid}__MRDS_Diff_V1_COMP_SIZE.nii.gz",\ 
              "${sid}__MRDS_Diff_V1_EIGENVALUES.nii.gz",\
              "${sid}__MRDS_Diff_V1_ISOTROPIC.nii.gz",\
              "${sid}__MRDS_Diff_V1_NUM_COMP.nii.gz",\
@@ -160,91 +160,7 @@ process Fit_MRDS {
              "${sid}__MRDS_Diff_V3_ISOTROPIC.nii.gz",\
              "${sid}__MRDS_Diff_V3_NUM_COMP.nii.gz",\
              "${sid}__MRDS_Diff_V3_PDDs_CARTESIAN.nii.gz" into mrds_for_modsel
-    path("${sid}__DTInolin_COMP_SIZE.nii.gz")
-    path("${sid}__DTInolin_EIGENVALUES.nii.gz")
-    path("${sid}__DTInolin_ISOTROPIC.nii.gz")
-    path("${sid}__DTInolin_NUM_COMP.nii.gz")
-    path("${sid}__DTInolin_PDDs_CARTESIAN.nii.gz")
     path("${sid}__DTInolin_ResponseAnisotropic.txt")
-    path("${sid}__DTInolin_ResponseAnisotropicMask.nii.gz")
-    path("${sid}__DTInolin_ResponseIsotropic.txt")
-    path("${sid}__DTInolin_ResponseIsotropicMask.nii.gz")
-    path("${sid}__DTInolin_Tensor.nii.gz")
-    path("${sid}__MRDS_Diff_${params.model_selection}_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Diff_${params.model_selection}_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Diff_${params.model_selection}_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Diff_${params.model_selection}_MSE.nii.gz")
-    path("${sid}__MRDS_Diff_${params.model_selection}_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Diff_${params.model_selection}_PDDs_CARTESIAN.nii.gz")
-    path("${sid}__MRDS_Diff_V0_COMP_SIZE.nii.gz"), optional: true
-    path("${sid}__MRDS_Diff_V0_EIGENVALUES.nii.gz"), optional: true
-    path("${sid}__MRDS_Diff_V0_ISOTROPIC.nii.gz"), optional: true
-    path("${sid}__MRDS_Diff_V0_MSE.nii.gz"), optional: true
-    path("${sid}__MRDS_Diff_V0_NUM_COMP.nii.gz"), optional: true
-    path("${sid}__MRDS_Diff_V0_PDDs_CARTESIAN.nii.gz"), optional: true
-    path("${sid}__MRDS_Diff_V1_MSE.nii.gz")
-    path("${sid}__MRDS_Diff_V2_MSE.nii.gz")
-    path("${sid}__MRDS_Diff_V3_MSE.nii.gz")
-    path("${sid}__MRDS_Equal_${params.model_selection}_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Equal_${params.model_selection}_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Equal_${params.model_selection}_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Equal_${params.model_selection}_MSE.nii.gz")
-    path("${sid}__MRDS_Equal_${params.model_selection}_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Equal_${params.model_selection}_PDDs_CARTESIAN.nii.gz")
-    path("${sid}__MRDS_Equal_V0_COMP_SIZE.nii.gz"), optional: true
-    path("${sid}__MRDS_Equal_V0_EIGENVALUES.nii.gz"), optional: true
-    path("${sid}__MRDS_Equal_V0_ISOTROPIC.nii.gz"), optional: true
-    path("${sid}__MRDS_Equal_V0_MSE.nii.gz"), optional: true
-    path("${sid}__MRDS_Equal_V0_NUM_COMP.nii.gz"), optional: true
-    path("${sid}__MRDS_Equal_V0_PDDs_CARTESIAN.nii.gz"), optional: true
-    path("${sid}__MRDS_Equal_V1_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Equal_V1_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Equal_V1_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Equal_V1_MSE.nii.gz")
-    path("${sid}__MRDS_Equal_V1_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Equal_V1_PDDs_CARTESIAN.nii.gz")
-    path("${sid}__MRDS_Equal_V2_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Equal_V2_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Equal_V2_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Equal_V2_MSE.nii.gz")
-    path("${sid}__MRDS_Equal_V2_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Equal_V2_PDDs_CARTESIAN.nii.gz")
-    path("${sid}__MRDS_Equal_V3_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Equal_V3_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Equal_V3_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Equal_V3_MSE.nii.gz")
-    path("${sid}__MRDS_Equal_V3_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Equal_V3_PDDs_CARTESIAN.nii.gz")
-    path("${sid}__MRDS_Fixed_${params.model_selection}_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Fixed_${params.model_selection}_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Fixed_${params.model_selection}_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Fixed_${params.model_selection}_MSE.nii.gz")
-    path("${sid}__MRDS_Fixed_${params.model_selection}_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Fixed_${params.model_selection}_PDDs_CARTESIAN.nii.gz")
-    path("${sid}__MRDS_Fixed_V0_COMP_SIZE.nii.gz"), optional: true
-    path("${sid}__MRDS_Fixed_V0_EIGENVALUES.nii.gz"), optional: true
-    path("${sid}__MRDS_Fixed_V0_ISOTROPIC.nii.gz"), optional: true
-    path("${sid}__MRDS_Fixed_V0_MSE.nii.gz"), optional: true
-    path("${sid}__MRDS_Fixed_V0_NUM_COMP.nii.gz"), optional: true
-    path("${sid}__MRDS_Fixed_V0_PDDs_CARTESIAN.nii.gz"), optional: true
-    path("${sid}__MRDS_Fixed_V1_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Fixed_V1_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Fixed_V1_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Fixed_V1_MSE.nii.gz")
-    path("${sid}__MRDS_Fixed_V1_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Fixed_V1_PDDs_CARTESIAN.nii.gz")
-    path("${sid}__MRDS_Fixed_V2_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Fixed_V2_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Fixed_V2_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Fixed_V2_MSE.nii.gz")
-    path("${sid}__MRDS_Fixed_V2_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Fixed_V2_PDDs_CARTESIAN.nii.gz")
-    path("${sid}__MRDS_Fixed_V3_COMP_SIZE.nii.gz")
-    path("${sid}__MRDS_Fixed_V3_EIGENVALUES.nii.gz")
-    path("${sid}__MRDS_Fixed_V3_ISOTROPIC.nii.gz")
-    path("${sid}__MRDS_Fixed_V3_MSE.nii.gz")
-    path("${sid}__MRDS_Fixed_V3_NUM_COMP.nii.gz")
-    path("${sid}__MRDS_Fixed_V3_PDDs_CARTESIAN.nii.gz")
 
     script:
     """
