@@ -28,8 +28,8 @@ DESCRIPTION
                                         ├── S1
                                         │   ├── *dwi.nii.gz
                                         │   ├── *mask.nii.gz (optional mask, WM mask is highly recommended)
-                                        |   ├── *scheme.bvec
-                                        |   ├── *scheme.bval
+                                        |   ├── *.bvec
+                                        |   ├── *.bval
                                         │   └── *tracking.trk (optional to perform TODI model selection)
                                         └── S2
                                             └── *
