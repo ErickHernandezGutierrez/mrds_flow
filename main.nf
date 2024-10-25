@@ -184,17 +184,18 @@ process Compute_TODI {
     set sid, path(dwi), path(tractogram) from dwi_tractogram_for_todi
 
     output:
-    set sid, "${sid}__MRDS_Diff_${params.model_selection}_TOD_NUFO.nii.gz" into nufo_for_modsel
-    path("${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz")
+    set sid, "${sid}__TOD_NUFO.nii.gz" into nufo_for_modsel
+    path("${sid}__TOD_SH.nii.gz")
 
     script:
     """
-    scil_compute_todi.py ${tractogram} --out_todi_sh ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz \
+    scil_compute_todi.py ${tractogram} \
+        --out_todi_sh ${sid}__TOD_SH.nii.gz \
         --reference ${dwi} \
         --sh_basis descoteaux07 -f
 
-    scil_compute_fodf_metrics.py ${sid}__MRDS_Diff_${params.model_selection}_TOD_SH.nii.gz \
-        --nufo ${sid}__MRDS_Diff_${params.model_selection}_TOD_NUFO.nii.gz \
+    scil_compute_fodf_metrics.py ${sid}__TOD_SH.nii.gz \
+        --nufo ${sid}__TOD_NUFO.nii.gz \
         --not_all \
         --sh_basis descoteaux07 \
         --rt 0.2 -f
@@ -209,9 +210,10 @@ nufo_for_modsel
 
 process Modsel_TODI {
     input:
-    set sid, path(nufo), path(dwi), path(mask), path(n1_compsize), path(n1_eigen), path(n1_iso), path(n1_numcomp), path(n1_pdds),\
-                                                path(n2_compsize), path(n2_eigen), path(n2_iso), path(n2_numcomp), path(n2_pdds),\
-                                                path(n3_compsize), path(n3_eigen), path(n3_iso), path(n3_numcomp), path(n3_pdds) from dwi_nufo_mrds_for_modsel
+    set sid, path(nufo), path(dwi), path(mask), \
+        path(n1_compsize), path(n1_eigen), path(n1_iso), path(n1_numcomp), path(n1_pdds), \
+        path(n2_compsize), path(n2_eigen), path(n2_iso), path(n2_numcomp), path(n2_pdds), \
+        path(n3_compsize), path(n3_eigen), path(n3_iso), path(n3_numcomp), path(n3_pdds) from dwi_nufo_mrds_for_modsel
 
     output:
     set sid, "${sid}__MRDS_Diff_TODI_EIGENVALUES.nii.gz" into eigenvalues_for_metrics
