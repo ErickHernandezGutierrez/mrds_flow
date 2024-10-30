@@ -4,9 +4,8 @@ if(params.help) {
     usage = file("$baseDir/USAGE")
     cpu_count = Runtime.runtime.availableProcessors()
 
-    bindings = ["use_isotropic":"$params.use_isotropic",
-                "use_provided_mask":"$params.use_provided_mask",
-                "use_local_tracking":"$params.use_local_tracking",
+    bindings = ["use_provided_mask":"$params.use_provided_mask",
+                "use_isotropic":"$params.use_isotropic",
                 "r_threshold":"$params.r_threshold",
                 "mrds_processes":"$params.mrds_processes",
                 "cpu_count":"$cpu_count"]
@@ -55,15 +54,11 @@ if(params.mrds_processes > params.processes) {
     error "Error params.mrds_processes should be lower than the params.processes - Currently ${params.mrds_processes} > ${params.processes}"
 }
 
+/* Watch out, files are ordered alphabetically in channel */
 Channel
-    .fromFilePairs("$params.input/**/*local_tracking.trk",
-        size: -1) { it.parent.name }
-    .set{local_tracking}
-
-Channel
-    .fromFilePairs("$params.input/**/*pft_tracking.trk",
-        size: -1) { it.parent.name }
-    .set{pft_tracking}
+    .fromFilePairs("$root/**/{*tracking*.*,}",
+                    size: -1, maxDepth:1) {it.parent.name}
+    .into{tractogram_for_todi; tractogram_for_mask}
 
 Channel
     .fromFilePairs("$params.input/**/*dwi.nii.gz",
@@ -89,14 +84,6 @@ workflow.onComplete {
     log.info "Pipeline completed at: $workflow.complete"
     log.info "Execution status: ${ workflow.success ? 'OK' : 'failed' }"
     log.info "Execution duration: $workflow.duration"
-}
-
-if (params.use_local_tracking) {
-    local_tracking
-        .into{tractogram_for_todi; tractogram_for_mask}
-} else {
-    pft_tracking
-        .into{tractogram_for_todi; tractogram_for_mask}
 }
 
 in_bval
