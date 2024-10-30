@@ -32,15 +32,13 @@ DESCRIPTION
                                         │   ├── *mask.nii.gz (optional mask, WM mask is highly recommended)
                                         |   ├── *.bvec
                                         |   ├── *.bval
-                                        |   ├── *pft_tracking.trk (optional to perform TODI model selection)
-                                        │   └── *local_tracking.trk (optional to perform TODI model selection)
+                                        │   └── *tracking.trk (optional to perform TODI model selection)
                                         └── S2
                                             └── *
 
     OPTIONAL ARGUMENTS (current value)
     --use_isotropic                     Include isotropic tensor fitting to MRDS ($use_isotropic)
     --use_provided_mask                 Use the provided pre-computed mask rather than using automatic computation ($use_provided_mask)
-    --use_local_tracking                Use local tracking to perform TODI, otherwise use PFT tracking ($use_local_tracking)
     --r_threshold                       Relative threshold on fODF amplitude in percentage ($r_threshold)
     --mrds_processes                    The number of parallel processes used for FIT_MRDS ($mrds_processes)
     --processes                         The number of parallel processes to launch ($cpu_count).
